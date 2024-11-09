@@ -75,8 +75,6 @@ node main.js
 
 服务端默认会监听本机所有网卡的 IP 地址（也可以自己设定），并在终端中显示前端界面所在的网址，使用浏览器打开即可使用。
 
-如果你使用的是 Node.js 17 或以上的版本，构建前端资源时可能会遇到 `Error: error:0308010C:digital envelope routines::unsupported` 的错误，在终端里设置环境变量 `NODE_OPTIONS=--openssl-legacy-provider` 可以解决这个问题。
-
 #### 使用 Docker 运行
 
 ##### 自己打包
@@ -91,14 +89,22 @@ docker container run -d -p 9501:9501 myclip
 > [!TIP]
 > Docker Hub 上的镜像是由他人打包的，仅为方便使用而在这里给出，版本可能会滞后于 repo 内的源代码。
 >
-> 如果你在使用时遇到了问题，请先确认这个问题在 repo 内的最新的源代码中是否仍然存在。
+> 如果你在使用时遇到了问题，请先确认这是本项目本身（而不是某个 Docker 镜像）的问题。
 
-```bash
-docker pull chenqiyux/lan-clip:latest
-docker container run -d -p 9501:9501 chenqiyux/lan-clip
+> [!WARNING]
+> [csmayi/lan-clip](https://hub.docker.com/r/csmayi/lan-clip) 打包的版本无法使用反向代理，在我[修复](https://github.com/TransparentLC/cloud-clipboard/commit/39ba010f0ac721337842be4668fce693f4587a95)之后并没有同步更新，目前不建议使用。
+
+```sh
+docker pull ***:latest
+docker container run -d -p 9501:9501 ***
 ```
 
-访问 [clipboard](http://127.0.0.1:9501)
+将 `***` 替换为镜像名称：
+
+* [chenqiyux/lan-clip](https://hub.docker.com/r/chenqiyux/lan-clip) amd64
+* [shuaigekda123/myclip](https://hub.docker.com/r/shuaigekda123/myclip) amd64/arm64
+
+然后访问 http://127.0.0.1:9501
 
 ### C 版服务端
 
