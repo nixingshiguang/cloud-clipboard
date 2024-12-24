@@ -30,4 +30,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository.split('/')[1] }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/cloud-clipboard:latest
