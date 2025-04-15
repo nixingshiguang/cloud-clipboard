@@ -10,8 +10,8 @@ on:
 
 env:
   DOCKER_HUB_REPOSITORY: nixingshiguang/cloud-clipboard  # 替换为你的 Docker Hub 仓库名
-  DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}  # Docker Hub 用户名
-  DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}  # Docker Hub Personal Access Token
+  DOCKER_HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}  # Docker Hub 用户名
+  DOCKER_HUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}  # Docker Hub Personal Access Token
 
 jobs:
   build-and-push:
