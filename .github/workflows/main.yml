@@ -1,17 +1,17 @@
-name: Docker Build and Push
+name: Docker Build and Push Multi-Arch
 
 on:
   push:
     branches:
-      - main  # 在 main 分支推送时触发
+      - main
     tags:
-      - 'v*'  # 在以 'v' 开头的标签推送时触发
-  workflow_dispatch:  # 支持手动触发
+      - 'v*'
+  workflow_dispatch:
 
 env:
-  DOCKER_HUB_REPOSITORY: nixingshiguang/cloud-clipboard  # 替换为你的 Docker Hub 仓库名
-  DOCKER_HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}  # Docker Hub 用户名
-  DOCKER_HUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}  # Docker Hub Personal Access Token
+  DOCKER_HUB_REPOSITORY: nixingshiguang/cloud-clipboard
+  DOCKER_HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_HUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 jobs:
   build-and-push:
@@ -21,6 +21,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Log in to Docker Hub
         run: echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 
@@ -28,14 +31,11 @@ jobs:
         id: date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      - name: Build Docker image
-        run: docker build -t $DOCKER_HUB_REPOSITORY:latest .
-
-      - name: Tag Docker image with date
-        run: |
-          docker tag $DOCKER_HUB_REPOSITORY:latest $DOCKER_HUB_REPOSITORY:${{ env.CURRENT_DATE }}
-
-      - name: Push Docker images
-        run: |
-          docker push $DOCKER_HUB_REPOSITORY:latest
-          docker push $DOCKER_HUB_REPOSITORY:${{ env.CURRENT_DATE }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: |
+            ${{ env.DOCKER_HUB_REPOSITORY }}:latest
+            ${{ env.DOCKER_HUB_REPOSITORY }}:${{ env.CURRENT_DATE }}
